@@ -1,0 +1,19 @@
+# Ignore IDE files
+.idea/
+.vscode/
+
+# Ignore .env files as they are personal
+/.env
+
+# Ignore DB dumps
+*.sql
+*.sql.gz
+*.mysql
+*.mysql.gz
+
+# Ignore temp files
+/.phpunit.result.cache
+
+# Ignore macOS DS_Store files
+.DS_Store
+**/.DS_Store
