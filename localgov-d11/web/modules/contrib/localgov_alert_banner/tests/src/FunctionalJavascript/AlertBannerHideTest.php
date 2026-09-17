@@ -5,10 +5,14 @@ declare(strict_types=1);
 namespace Drupal\Tests\localgov_alert_banner\FunctionalJavascript;
 
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Functional tests for LocalGovDrupal Alert banner block.
+ *
+ * @group localgov_alert_banner
  */
+#[Group('localgov_alert_banner')]
 class AlertBannerHideTest extends WebDriverTestBase {
 
   /**

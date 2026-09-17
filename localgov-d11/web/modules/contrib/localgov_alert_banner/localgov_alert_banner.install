@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\Config;
 use Drupal\Core\Config\FileStorage;
@@ -15,7 +16,6 @@ use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * Implements hook_install().
@@ -159,7 +159,7 @@ EOY;
   $workflow = \Drupal::service('config.factory')->getEditable('workflows.workflow.localgov_alert_banners');
   assert($workflow instanceof Config);
   if ($workflow->isNew()) {
-    $workflow->setData(Yaml::parse($workflows_workflow_localgov_alert_banner));
+    $workflow->setData(Yaml::decode($workflows_workflow_localgov_alert_banner));
     $workflow->save();
   }
 
@@ -248,4 +248,11 @@ function localgov_alert_banner_update_10002(): void {
     user_role_grant_permissions('emergency_publisher', $perms);
     user_role_revoke_permissions('emergency_publisher', ['access administration pages']);
   }
+}
+
+/**
+ * Flush all caches to allow for hook rediscovery.
+ */
+function localgov_alert_banner_update_10003(): void {
+  drupal_flush_all_caches();
 }

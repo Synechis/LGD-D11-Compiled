@@ -58,17 +58,49 @@ You will also need to have certain PHP extensions enabled (see https://www.drupa
 
 If you see errors when running composer require, double check your PHP extensions.
 
-## Composer and Lando
+## Composer
 
-To install locally, you will need Composer and we recommend using Lando for a consistent developer environment.
+To install locally, you can use Composer to create the project and download dependencies.
 
  - https://getcomposer.org/
+
+## DDEV and Lando
+
+To install locally, we recommend using DDEV or Lando to build and manage docker containers. 
+
+ - https://ddev.com/
  - https://lando.dev/
 
-Please also see the Lando requirements section for details of Docker
-requirements for different operating systems.
+See the respective requirements section for details of Docker requirements.
 
-https://docs.lando.dev/basics/installation.html#system-requirements
+ - https://ddev.com/get-started/
+ - https://docs.lando.dev/basics/installation.html#system-requirements
+
+## Installing LocalGov Drupal locally with DDEV
+
+Change MY_PROJECT to whatever you'd like your project directory to be called.
+
+```
+composer create-project --no-install drupal/localgov_project:^4.0 MY_PROJECT 
+```
+Change directory into the MY_PROJECT directory and run ddev start.
+
+```
+cd MY_PROJECT
+ddev start
+```
+
+Once ddev has finished building, run composer install.
+
+```
+ddev composer install
+```
+
+then run the site installer.
+
+```
+ddev drush si localgov -y
+```
 
 ## Installing LocalGov Drupal locally with composer
 
@@ -78,7 +110,7 @@ To install LocalGov Drupal locally for testing or development, use the
 Change `MY_PROJECT` to whatever you'd like your project directory to be called.
 
 ```bash
-composer create-project localgovdrupal/localgov-project:^3.0 MY_PROJECT --no-install
+composer create-project localgovdrupal/localgov-project:^4.0 MY_PROJECT --no-install
 ```
 
 Change directory into the MY_PROJECT directory and run lando start.

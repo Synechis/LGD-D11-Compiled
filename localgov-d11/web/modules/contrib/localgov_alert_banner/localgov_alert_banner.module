@@ -8,104 +8,75 @@
 declare(strict_types=1);
 
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Hook\Attribute\LegacyHook;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\localgov_alert_banner\Hook\GinHooks;
+use Drupal\localgov_alert_banner\Hook\HelpHooks;
+use Drupal\localgov_alert_banner\Hook\ModuleHooks;
+use Drupal\localgov_alert_banner\Hook\ThemeHooks;
 use Drupal\user\RoleInterface;
 
 /**
  * Implements hook_help().
  */
+#[LegacyHook]
 function localgov_alert_banner_help($route_name, RouteMatchInterface $route_match): string|\Stringable|array|null {
-  switch ($route_name) {
-    // Main module help for the localgov_alert_banner module.
-    case 'help.page.localgov_alert_banner':
-      $output = '';
-      $output .= '<h3>' . t('About') . '</h3>';
-      $output .= '<p>' . t('Alert Banner Support module') . '</p>';
-      return $output;
-
-    default:
-      return NULL;
-  }
-}
-
-/**
- * Implements hook_preprocess_localgov_alert_banner().
- */
-function localgov_alert_banner_preprocess(&$variables): void {
-
-  if (isset($variables['elements']['#localgov_alert_banner'])) {
-
-    // Get token.
-    $token = $variables['elements']['#localgov_alert_banner']->getToken();
-
-    // Add a hidden class.
-    $variables['attributes']['class'][] = 'hidden';
-
-    // Token as attribute.
-    $variables['attributes']['data-dismiss-alert-token'] = $token;
-
-    // Remove the content moderation form if it is present.
-    // Do this only on the confirmation form page.
-    $route_match = \Drupal::routeMatch();
-    $route_name = $route_match->getRouteName();
-    if ($route_name == 'entity.localgov_alert_banner.status_form') {
-      unset($variables['content']['content_moderation_control']);
-    }
-
-    // Set is_front variable.
-    try {
-      $variables['is_front'] = \Drupal::service('path.matcher')->isFrontPage();
-    }
-    catch (Exception $e) {
-      $variables['is_front'] = FALSE;
-    }
-  }
+  return \Drupal::service(HelpHooks::class)->help($route_name, $route_match);
 }
 
 /**
  * Implements hook_theme().
  */
+#[LegacyHook]
 function localgov_alert_banner_theme(): array {
-  $theme = [];
-  $theme['localgov_alert_banner'] = [
-    'render element' => 'elements',
-    'file' => 'localgov_alert_banner.page.inc',
-    'template' => 'localgov-alert-banner',
-  ];
-  $theme['localgov_alert_banner_content_add_list'] = [
-    'render element' => 'content',
-    'variables' => ['content' => NULL],
-    'file' => 'localgov_alert_banner.page.inc',
-  ];
-  return $theme;
+  return \Drupal::service(ThemeHooks::class)->theme();
+}
+
+/**
+ * Implements hook_preprocess_localgov_alert_banner().
+ */
+#[LegacyHook]
+function localgov_alert_banner_preprocess_localgov_alert_banner(&$variables): void {
+
+  \Drupal::service(ThemeHooks::class)->preprocessLocalgovAlertBanner($variables);
 }
 
 /**
  * Implements hook_theme_suggestions_HOOK().
  */
+#[LegacyHook]
 function localgov_alert_banner_theme_suggestions_localgov_alert_banner(array $variables): array {
-  $suggestions = [];
-  $entity = $variables['elements']['#localgov_alert_banner'];
-  $sanitized_view_mode = strtr($variables['elements']['#view_mode'], '.', '_');
-
-  $suggestions[] = 'localgov_alert_banner__' . $sanitized_view_mode;
-  $suggestions[] = 'localgov_alert_banner__' . $entity->bundle();
-  $suggestions[] = 'localgov_alert_banner__' . $entity->bundle() . '__' . $sanitized_view_mode;
-  $suggestions[] = 'localgov_alert_banner__' . $entity->id();
-  $suggestions[] = 'localgov_alert_banner__' . $entity->id() . '__' . $sanitized_view_mode;
-  return $suggestions;
+  return \Drupal::service(ThemeHooks::class)->themeSuggestionsLocalgovAlertBanner($variables);
 }
 
 /**
  * Implements hook_modules_installed().
  */
+#[LegacyHook]
 function localgov_alert_banner_modules_installed($modules, $is_syncing): void {
 
-  // Configure scheduled transitions if it's being installed.
-  if (in_array('scheduled_transitions', $modules, TRUE)) {
-    localgov_alert_banner_configure_scheduled_transitions();
-  }
+  \Drupal::service(ModuleHooks::class)->modulesInstalled($modules, $is_syncing);
 }
+
+/**
+ * Implements hook_preprocess_field().
+ */
+#[LegacyHook]
+function localgov_alert_banner_preprocess_field(&$variables): void {
+  \Drupal::service(ThemeHooks::class)->preprocessField($variables);
+}
+
+/**
+ * Implements hook_gin_content_form_routes().
+ */
+#[LegacyHook]
+function localgov_alert_banner_gin_content_form_routes(): array {
+  return \Drupal::service(GinHooks::class)->ginContentFormRoutes();
+}
+
+/* Private methods.
+ * @todo convert to class methods.
+ */
 
 /**
  * Configure scheduled transitions.
@@ -162,31 +133,4 @@ function localgov_alert_banner_set_default_permissions(): void {
     $perms[] = 'access toolbar';
   }
   user_role_grant_permissions('emergency_publisher', $perms);
-}
-
-/**
- * Implements hook_preprocess_field().
- */
-function localgov_alert_banner_preprocess_field(&$variables): void {
-  if ($variables['element']['#field_name'] == 'link' && $variables['element']['#bundle'] == 'localgov_alert_banner') {
-    foreach ($variables['element']['#items'] as $item) {
-      if (empty($item->getValue()['title'])) {
-        $default_text = t('More information');
-        $variables['items'][0]['content']['#title'] = $default_text;
-      }
-    }
-  }
-}
-
-/**
- * Implements hook_gin_content_form_routes().
- */
-function localgov_alert_banner_gin_content_form_routes(): array {
-  return [
-    // Alert banner add form.
-    'entity.localgov_alert_banner.add_form',
-
-    // Alert banner add form edit form.
-    'entity.localgov_alert_banner.edit_form',
-  ];
 }

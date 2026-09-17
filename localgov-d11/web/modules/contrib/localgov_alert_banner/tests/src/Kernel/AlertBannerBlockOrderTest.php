@@ -9,12 +9,14 @@ use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\localgov_alert_banner\Entity\AlertBannerEntity;
 use Drupal\user\RoleInterface;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Kernel test for alert banner order.
  *
  * @group localgov_alert_banner
  */
+#[Group('localgov_alert_banner')]
 class AlertBannerBlockOrderTest extends KernelTestBase {
 
   /**

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\localgov_alert_banner;
 
+use Drupal\Component\Utility\DeprecationHelper;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\Routing\AdminHtmlRouteProvider;
 use Symfony\Component\Routing\Route;
@@ -60,7 +61,13 @@ class AlertBannerEntityHtmlRouteProvider extends AdminHtmlRouteProvider {
 
       // Entity types with serial IDs can specify this in their route
       // requirements, improving the matching process.
-      if ($this->getEntityTypeIdKeyType($entity_type) === 'integer') {
+      $entity_type_has_int_key = DeprecationHelper::backwardsCompatibleCall(
+        currentVersion: \Drupal::VERSION,
+        deprecatedVersion: '11.4',
+        currentCallable: fn() => $entity_type->hasIntegerId(),
+        deprecatedCallable: fn() => $this->getEntityTypeIdKeyType($entity_type) === 'integer',
+      );
+      if ($entity_type_has_int_key) {
         $route->setRequirement($entity_type_id, '\d+');
       }
       return $route;

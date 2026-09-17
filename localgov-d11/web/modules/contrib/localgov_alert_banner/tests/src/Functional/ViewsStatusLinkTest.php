@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\localgov_alert_banner\Functional;
 
-use Drupal\Tests\BrowserTestBase;
 use Drupal\localgov_alert_banner\Entity\AlertBannerEntity;
+use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the core Drupal\views\Plugin\views\StatusPageLink handler.
  *
  * @group localgov_alert_banner
  */
+#[Group('localgov_alert_banner')]
 class ViewsStatusLinkTest extends BrowserTestBase {
 
   /**

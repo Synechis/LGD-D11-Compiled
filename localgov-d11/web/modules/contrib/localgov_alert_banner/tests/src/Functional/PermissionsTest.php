@@ -6,11 +6,15 @@ namespace Drupal\Tests\localgov_alert_banner\Functional;
 
 use Drupal\Tests\BrowserTestBase;
 use Drupal\user\RoleInterface;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Functional tests for LocalGovDrupal Alert banner permissions.
+ *
+ * @group localgov_alert_banner
  */
+#[Group('localgov_alert_banner')]
 class PermissionsTest extends BrowserTestBase {
 
   /**

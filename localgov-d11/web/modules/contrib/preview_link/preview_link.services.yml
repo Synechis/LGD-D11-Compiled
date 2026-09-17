@@ -83,3 +83,7 @@ services:
 
   Drupal\preview_link\Hook\PreviewLinkEntityHooks:
     class: Drupal\preview_link\Hook\PreviewLinkEntityHooks
+
+  plugin.manager.preview_link_autopopulate:
+    class: Drupal\preview_link\PreviewLinkAutopopulatePluginManager
+    parent: default_plugin_manager

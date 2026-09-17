@@ -15,7 +15,7 @@ class RouteSubscriber extends RouteSubscriberBase {
   /**
    * {@inheritdoc}
    */
-  protected function alterRoutes(RouteCollection $collection) {
+  protected function alterRoutes(RouteCollection $collection): void {
     if ($route = $collection->get('entity.group_relationship.create_page')) {
       $copy = clone $route;
       $copy->setPath('group/{group}/alert-banner/create');

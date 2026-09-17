@@ -6,11 +6,15 @@ namespace Drupal\Tests\localgov_alert_banner\Functional;
 
 use Drupal\Core\Url;
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Functional tests for LocalGovDrupal Alert banner admin view.
+ *
+ * @group localgov_alert_banner
  */
+#[Group('localgov_alert_banner')]
 class AdminViewTest extends BrowserTestBase {
 
   /**

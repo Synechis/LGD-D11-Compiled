@@ -14,6 +14,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\preview_link\Access\PreviewLinkAccessCheck;
 use Drupal\preview_link\PreviewLinkHookHelper;
+use Drupal\preview_link\PreviewLinkHostInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -27,6 +28,7 @@ final class PreviewLinkEntityHooks implements ContainerInjectionInterface {
   public function __construct(
     protected PreviewLinkAccessCheck $accessCheck,
     protected PreviewLinkHookHelper $hookHelper,
+    protected PreviewLinkHostInterface $host,
     protected RouteMatchInterface $routeMatch,
   ) {
   }
@@ -38,6 +40,7 @@ final class PreviewLinkEntityHooks implements ContainerInjectionInterface {
     return new static(
       $container->get('access_check.preview_link'),
       $container->get('preview_link.hook_helper'),
+      $container->get('preview_link.host'),
       $container->get('current_route_match'),
     );
   }
@@ -66,10 +69,21 @@ final class PreviewLinkEntityHooks implements ContainerInjectionInterface {
       ->addCacheableDependency($entity)
       ->addCacheContexts(['preview_link_route']);
 
-    // Only run our access checks on the entity we're previewing.
-    $route_entity = $this->routeMatch->getParameter($entityParameterName);
-    if ($this->hookHelper->isPreviewLinkGrantingAccess() && $route_entity instanceof ContentEntityInterface && $route_entity->id() === $entity->id() && $route_entity->getEntityTypeId() === $entity->getEntityTypeId()) {
-      return $this->accessCheck->access($entity, $this->routeMatch->getParameter('preview_token'));
+    if (!$this->hookHelper->isPreviewLinkGrantingAccess()) {
+      return $neutral;
+    }
+
+    // Only run our access checks on entities in a preview link.
+    $preview_links = $this->host->getPreviewLinks($entity);
+    foreach ($preview_links as $preview_link) {
+      foreach ($preview_link->getEntities() as $preview_entity) {
+        if (
+          $preview_entity->id() === $entity->id() &&
+          $preview_entity->getEntityTypeId() === $entity->getEntityTypeId()
+        ) {
+          return $this->accessCheck->access($entity, $this->routeMatch->getParameter('preview_token'));
+        }
+      }
     }
 
     return $neutral;

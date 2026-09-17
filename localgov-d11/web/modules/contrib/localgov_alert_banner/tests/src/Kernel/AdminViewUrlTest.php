@@ -7,12 +7,14 @@ namespace Drupal\Tests\localgov_alert_banner\Kernel;
 use Drupal\Core\Url;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\views\Views;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Test admin view url.
  *
  * @group localgov_alert_banner
  */
+#[Group('localgov_alert_banner')]
 class AdminViewUrlTest extends KernelTestBase {
 
   /**

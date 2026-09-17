@@ -6,19 +6,21 @@ namespace Drupal\Tests\localgov_alert_banner\Kernel;
 
 use Drupal\Core\Extension\MissingDependencyException;
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\scheduled_transitions\Entity\ScheduledTransition;
 use Drupal\Tests\node\Traits\ContentTypeCreationTrait;
 use Drupal\Tests\node\Traits\NodeCreationTrait;
-use Drupal\scheduled_transitions\Entity\ScheduledTransition;
 use Drupal\user\Entity\User;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Kernel test for scheduling transitions.
  *
- * @group localgov_workflows
+ * @group localgov_alert_banner
  *
  * @requires module dynamic entity reference
  * @requires module scheduled_transitions
  */
+#[Group('localgov_alert_banner')]
 class SchedulingTest extends KernelTestBase {
 
   use ContentTypeCreationTrait;
@@ -33,6 +35,7 @@ class SchedulingTest extends KernelTestBase {
     'condition_field',
     'content_moderation',
     'field',
+    'filter',
     'link',
     'options',
     'system',

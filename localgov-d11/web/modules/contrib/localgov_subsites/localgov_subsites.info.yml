@@ -22,7 +22,7 @@ dependencies:
   - localgov_core:localgov_core
   - localgov_topics:localgov_topics
 
-# Information added by Drupal.org packaging script on 2026-07-21
-version: '2.6.2'
+# Information added by Drupal.org packaging script on 2026-09-07
+version: '2.6.5'
 project: 'localgov_subsites'
-datestamp: 1784633074
+datestamp: 1788789472

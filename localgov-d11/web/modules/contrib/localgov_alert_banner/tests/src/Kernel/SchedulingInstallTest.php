@@ -7,12 +7,14 @@ namespace Drupal\Tests\localgov_alert_banner\Kernel;
 use Drupal\Core\Extension\MissingDependencyException;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\user\Entity\Role;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Test enabling scheduling.
  *
  * @group localgov_alert_banner
  */
+#[Group('localgov_alert_banner')]
 class SchedulingInstallTest extends KernelTestBase {
 
   /**
@@ -23,7 +25,9 @@ class SchedulingInstallTest extends KernelTestBase {
   protected static $modules = [
     'condition_field',
     'content_moderation',
+    'filter',
     'field',
+    'filter',
     'link',
     'options',
     'system',

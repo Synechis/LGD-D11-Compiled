@@ -5,10 +5,14 @@ declare(strict_types=1);
 namespace Drupal\Tests\group_alert_banner\Kernel;
 
 use Drupal\Tests\group\Kernel\GroupKernelTestBase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests allocation of Group specific Alert banners.
+ *
+ * @group group_alert_banner
  */
+#[Group('group_alert_banner')]
 class GroupAlertBannerTest extends GroupKernelTestBase {
 
   /**
@@ -21,7 +25,7 @@ class GroupAlertBannerTest extends GroupKernelTestBase {
    * - Verifies banners have been assigned to their respective groups as
    *   expected.
    */
-  public function testBannerAllocation() {
+  public function testBannerAllocation(): void {
 
     $group0 = $this->createGroup(['type' => 'test_group']);
     $group1 = $this->createGroup(['type' => 'test_group']);

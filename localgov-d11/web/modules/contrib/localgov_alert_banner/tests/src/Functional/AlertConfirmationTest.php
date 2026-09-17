@@ -5,14 +5,16 @@ declare(strict_types=1);
 namespace Drupal\Tests\localgov_alert_banner\Functional;
 
 use Drupal\Core\Url;
-use Drupal\Tests\BrowserTestBase;
 use Drupal\localgov_alert_banner\Entity\AlertBannerEntity;
+use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Functional tests for LocalGovDrupal Alert banner confirmation form.
  *
  * @group localgov_alert_banner
  */
+#[Group('localgov_alert_banner')]
 class AlertConfirmationTest extends BrowserTestBase {
 
   /**

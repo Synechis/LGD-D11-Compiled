@@ -12,3 +12,20 @@ services:
   localgov_alert_banner.manager:
     class: Drupal\localgov_alert_banner\AlertBannerManager
     arguments: ['@entity_type.manager', '@current_user', '@entity.repository']
+
+  # Hooks
+  Drupal\localgov_alert_banner\Hook\HelpHooks:
+    class: Drupal\localgov_alert_banner\Hook\HelpHooks
+    autowire: true
+
+  Drupal\localgov_alert_banner\Hook\GinHooks:
+    class: Drupal\localgov_alert_banner\Hook\GinHooks
+    autowire: true
+  
+  Drupal\localgov_alert_banner\Hook\ModuleHooks:
+    class: Drupal\localgov_alert_banner\Hook\ModuleHooks
+    autowire: true
+
+  Drupal\localgov_alert_banner\Hook\ThemeHooks:
+    class: Drupal\localgov_alert_banner\Hook\ThemeHooks
+    autowire: true

@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\localgov_alert_banner\Functional;
 
+use Drupal\node\NodeInterface;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\node\Traits\NodeCreationTrait;
-use Drupal\node\NodeInterface;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Functional tests for LocalGov Drupal Alert banner admin view.
+ *
+ * @group localgov_alert_banner
  */
+#[Group('localgov_alert_banner')]
 class VisibilityTest extends BrowserTestBase {
   use NodeCreationTrait;
 

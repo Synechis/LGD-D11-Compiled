@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\localgov_alert_banner\Entity;
 
+use Drupal\condition_field\ConditionAccessResolver;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EditorialContentEntityBase;
 use Drupal\Core\Entity\EntityChangedTrait;
@@ -12,7 +13,6 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\RevisionableInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
-use Drupal\condition_field\ConditionAccessResolver;
 use Drupal\user\UserInterface;
 
 /**

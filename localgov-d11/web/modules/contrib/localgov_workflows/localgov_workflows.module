@@ -8,6 +8,7 @@
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\localgov_roles\RolesHelper;
 use Drupal\localgov_workflows\RequireLogMessage;
 use Drupal\node\NodeTypeInterface;
@@ -149,11 +150,16 @@ function localgov_workflows_menu_local_tasks_alter(&$data, $route_name, Refinabl
     $data['tabs'][0]['entity.scheduled_transition.collection']['#link']['title'] = t('Scheduling');
     $data['tabs'][0]['entity.scheduled_transition.collection']['#weight'] = 70;
   }
-  if (isset($data['tabs'][0]['scheduled_transitions.tasks:node.scheduled_transitions']['#link']['title'])) {
-    $title = $data['tabs'][0]['scheduled_transitions.tasks:node.scheduled_transitions']['#link']['title'];
-    $arguments = $title->getArguments();
-    $arguments['@title'] = 'Scheduling';
-    $data['tabs'][0]['scheduled_transitions.tasks:node.scheduled_transitions']['#link']['title'] = t($title->getUntranslatedString(), $arguments); // phpcs:ignore.
+  $scheduled_title = $data['tabs'][0]['scheduled_transitions.tasks:node.scheduled_transitions']['#link']['title'] ?? NULL;
+  if ($scheduled_title instanceof TranslatableMarkup) {
+    $arguments = $scheduled_title->getArguments();
+    $arguments['@title'] = (string) t('Scheduling');
+    $data['tabs'][0]['scheduled_transitions.tasks:node.scheduled_transitions']['#link']['title'] = t($scheduled_title->getUntranslatedString(), $arguments // phpcs:ignore.
+    );
+  }
+  elseif ($scheduled_title !== NULL) {
+    // Fallback if another module has already set a plain string title.
+    $data['tabs'][0]['scheduled_transitions.tasks:node.scheduled_transitions']['#link']['title'] = t('Scheduling');
   }
 
   // Rename 'Moderated content' tab to 'Unpublished'.
